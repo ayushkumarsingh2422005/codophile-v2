@@ -61,6 +61,13 @@ const categories = [
         color: "from-fuchsia-500 to-pink-500"
     },
     {
+        title: "Text Shadow",
+        description: "Apply shadows to text with multiple layers and blur effects.",
+        icon: Type,
+        href: "/playground/css/text-shadow",
+        color: "from-red-500 to-orange-500"
+    },
+    {
         title: "Filters",
         description: "Apply brightness, contrast, blur, and hue-rotate filters.",
         icon: Palette,
