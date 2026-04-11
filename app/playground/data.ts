@@ -111,6 +111,11 @@ export const playgroundData = {
                 description: "Master Tailwind border utilities including border-width, rounded corners, border-color, and focus ring effects.",
                 keywords: ["tailwind borders", "rounded corners", "border utilities", "focus ring", "tailwind rounded"]
             },
+            outline: {
+                title: "Tailwind Outline Playground - Outline Width, Offset & Color",
+                description: "Experiment with Tailwind outline utilities including outline width, outline-offset, outline style, outline color, and inset outlines for focus rings.",
+                keywords: ["tailwind outline", "outline-offset", "outline utilities", "focus ring tailwind", "outline-inset"]
+            },
             effects: {
                 title: "Tailwind Effects & Filters - Shadow, Opacity, Blend Modes",
                 description: "Experiment with Tailwind effect utilities including box-shadow, opacity, mix-blend-mode, and backdrop-filter for stunning UI effects.",
