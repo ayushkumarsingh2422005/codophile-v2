@@ -2,12 +2,29 @@
 
 // Tooltip Client Playground for Tailwind CSS
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_TOOLTIP_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind tooltip pattern",
+    intro:
+        "This generator uses `group` + `group-hover:` to reveal a positioned tooltip. `invisible`/`opacity` pair with `group-hover:visible`/`group-hover:opacity-100` for fade; absolute positioning utilities place the bubble; optional border triangles use small absolutely positioned divs.",
+    syntax: [
+        'className="group relative"',
+        'className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all"',
+    ],
+    values: [
+        { term: "group / group-hover", desc: "Parent hover state drives child visibility." },
+        { term: "absolute + translate", desc: "Centers the tooltip relative to the trigger." },
+        { term: "transition-all duration-*", desc: "Smooths hover appearance." },
+    ],
+    tip: "Add `focus-within:` variants for keyboard accessibility in production.",
+};
 
 type TooltipPosition = "top" | "bottom" | "left" | "right";
 
@@ -21,6 +38,8 @@ export default function TooltipClient() {
     const [width, setWidth] = useState<"auto" | "w-32" | "w-48" | "w-64">("w-32");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset
     const resetValues = () => {
@@ -126,9 +145,16 @@ export default function TooltipClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Tooltip Utility
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Tooltip Utility
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind tooltip patterns in this playground"
+                                title={`What is ${TW_TOOLTIP_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Generate Tailwind utility classes for tooltips with proper positioning and visibility.
                         </p>
@@ -294,6 +320,10 @@ export default function TooltipClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TOOLTIP_GUIDE} onClose={closeGuide} titleId="tw-tooltip-guide-title" />
+            )}
 
             <Footer />
         </div>

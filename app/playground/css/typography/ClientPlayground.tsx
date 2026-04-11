@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Type } from "lucide-react";
 import Link from "next/link";
+
+const CSS_TYPOGRAPHY_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS typography",
+    intro:
+        "Core text styling includes `font-size`, `font-weight`, `line-height`, and `letter-spacing`. Text decoration combines line style, color, and thickness for underlines and similar lines.",
+    syntax: [
+        "font-size: 1rem; font-weight: 600;",
+        "line-height: 1.5; letter-spacing: 0.02em;",
+        "text-decoration: underline solid #000 2px;",
+    ],
+    values: [
+        { term: "line-height", desc: "Unitless numbers multiply font-size; improves readability in blocks." },
+        { term: "letter-spacing", desc: "Extra space between glyphs; can be negative for tight headings." },
+        { term: "font-weight", desc: "Numeric weights map to available faces in the font family." },
+        { term: "text-decoration", desc: "Shorthand for line, style, color, and thickness for under/over lines." },
+    ],
+    tip: "Pair `line-height` with comfortable `font-size` for body copy; avoid ultra-tight spacing in long paragraphs.",
+};
 
 export default function TypographyClient() {
     // Line Height & Letter Spacing
@@ -23,6 +42,8 @@ export default function TypographyClient() {
     // Sample Text
     const [text, setText] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset function
     const resetValues = () => {
@@ -70,9 +91,16 @@ export default function TypographyClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Typography
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Typography
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS typography in this playground"
+                                title={`What is ${CSS_TYPOGRAPHY_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control line height, spacing, decoration, and font properties.
                         </p>
@@ -208,6 +236,14 @@ export default function TypographyClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={CSS_TYPOGRAPHY_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-typography-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

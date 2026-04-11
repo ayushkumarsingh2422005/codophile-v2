@@ -1,11 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, LayoutTemplate } from "lucide-react";
 import Link from "next/link";
+
+const TW_LAYOUT_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind layout utilities",
+    intro:
+        "These classes wrap Flexbox: `flex`, direction (`flex-row` / `flex-col`), alignment (`justify-*`, `items-*`), wrapping, and `gap-*`. They compile to the same CSS as handwritten flex properties with responsive variants available in full Tailwind.",
+    syntax: ['className="flex flex-row justify-between items-center gap-4 flex-wrap"'],
+    values: [
+        { term: "flex / inline-flex", desc: "Establishes a flex formatting context." },
+        { term: "flex-row / flex-col", desc: "Main axis direction." },
+        { term: "justify-* / items-*", desc: "Align content along main and cross axes." },
+        { term: "gap-*", desc: "Spacing between flex items using the theme scale." },
+    ],
+    tip: "Combine with `p-*`, `w-*`, and `h-*` on the container to frame the demo area.",
+};
 
 export default function TailwindLayoutPlayground() {
     const [flexDirection, setFlexDirection] = useState("flex-row");
@@ -17,6 +32,8 @@ export default function TailwindLayoutPlayground() {
     // Item count for demo
     const [itemCount, setItemCount] = useState(4);
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setFlexDirection("flex-row");
@@ -50,9 +67,16 @@ export default function TailwindLayoutPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-blue-500">
-                            Layout Utilities
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-blue-500">
+                                Layout Utilities
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind layout utilities in this playground"
+                                title={`What is ${TW_LAYOUT_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Master Flexbox with Tailwind classes.
                         </p>
@@ -158,6 +182,9 @@ export default function TailwindLayoutPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_LAYOUT_GUIDE} onClose={closeGuide} titleId="tw-layout-guide-title" />
+            )}
             <Footer />
         </div>
     );

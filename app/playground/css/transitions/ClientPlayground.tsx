@@ -1,11 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Zap, Play, PlayCircle, Clock } from "lucide-react";
 import Link from "next/link";
+
+const CSS_TRANSITIONS_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS transitions",
+    intro:
+        "`transition` defines how interpolated values change over time when a property moves from one state to another (often via `:hover` or class toggles). You set which properties animate, for how long, with what easing, and optional delay.",
+    syntax: [
+        "transition: property duration timing-function delay;",
+        "transition: all 0.3s ease-in-out;",
+    ],
+    values: [
+        { term: "transition-property", desc: "Which CSS properties animate; `all` is convenient but can be heavy." },
+        { term: "transition-duration", desc: "How long the interpolation runs." },
+        { term: "transition-timing-function", desc: "Easing curve: linear, ease, cubic-bezier, steps…" },
+        { term: "transition-delay", desc: "Wait before the change begins after the trigger." },
+    ],
+    tip: "Only animatable properties transition—`display` and most `content` values do not interpolate smoothly.",
+};
 
 export default function TransitionsClient() {
     // Transition Properties
@@ -38,6 +56,8 @@ export default function TransitionsClient() {
     };
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset function
     const resetValues = () => {
@@ -80,9 +100,16 @@ export default function TransitionsClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Transitions
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Transitions
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS transitions in this playground"
+                                title={`What is ${CSS_TRANSITIONS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control the speed, curve, and delay of state changes.
                         </p>
@@ -258,6 +285,14 @@ export default function TransitionsClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={CSS_TRANSITIONS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-transitions-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, LayoutGrid, BoxSelect } from "lucide-react";
 import Link from "next/link";
+
+const CSS_GRID_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS Grid layout",
+    intro:
+        "Grid defines a two-dimensional track system: `grid-template-columns` and `grid-template-rows` define the matrix, while `gap` and alignment properties distribute space. Items can span tracks with `grid-column` / `grid-row` line placements.",
+    syntax: [
+        ".grid { display: grid; grid-template-columns; grid-template-rows; gap; }",
+        ".item { grid-column-start/end; grid-row-start/end; justify-self; align-self; }",
+    ],
+    values: [
+        { term: "grid-template-columns / rows", desc: "Track sizing with fr, px, repeat(), minmax(), etc." },
+        { term: "gap", desc: "Gutters between rows and columns." },
+        { term: "justify-items / align-items", desc: "Default alignment of items in their cells." },
+        { term: "justify-content / align-content", desc: "Distribution of the grid within the container when extra space exists." },
+        { term: "grid-column / grid-row", desc: "Which lines each item spans." },
+    ],
+    tip: "Use the container vs. items tab to copy the right rule set for your layer.",
+};
 
 interface GridItemStyle {
     id: number;
@@ -44,6 +63,8 @@ export default function GridClient() {
 
     const [items, setItems] = useState<GridItemStyle[]>(defaultItems);
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const addItem = () => {
         const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
@@ -153,9 +174,16 @@ export default function GridClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            CSS Grid Layout
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                CSS Grid Layout
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS Grid in this playground"
+                                title={`What is ${CSS_GRID_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Master grid layouts by controlling grid templates, gaps, and item placement.
                         </p>
@@ -424,6 +452,14 @@ export default function GridClient() {
                     </div>
                 </motion.div>
             </div >
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={CSS_GRID_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-grid-guide-title"
+                />
+            )}
 
             <Footer />
         </div >

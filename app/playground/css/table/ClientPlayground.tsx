@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TABLE_STYLING_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS table styling",
+    intro:
+        "Tables combine `border-collapse` or `border-spacing`, cell borders, padding, alignment, and optional zebra striping or row hover. A wrapper with `overflow-x: auto` enables horizontal scrolling on small screens.",
+    syntax: [
+        "table { width; border-collapse; }",
+        "th, td { border; padding; text-align; vertical-align; }",
+        "tr:nth-child(even) { background; } /* striped */",
+    ],
+    values: [
+        { term: "border-collapse", desc: "collapse merges adjacent borders; separate keeps distinct cells and uses border-spacing." },
+        { term: "width / padding", desc: "Overall table width and cell padding for readability." },
+        { term: "text-align / vertical-align", desc: "Align content within cells." },
+        { term: "striped rows", desc: "Alternating row backgrounds via nth-child selectors." },
+    ],
+    tip: "Use `<th scope=\"col\">` in real HTML for accessibility.",
+};
 
 export default function TablePlaygroundClient() {
     // State
@@ -25,6 +44,8 @@ export default function TablePlaygroundClient() {
     const [headerBg, setHeaderBg] = useState("#1f2937"); // gray-800
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setBorderWidth(1);
@@ -120,9 +141,16 @@ th {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Table Styling
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Table Styling
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS table styling in this playground"
+                                title={`What is ${TABLE_STYLING_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Design responsive and stylish tables with CSS properties.
                         </p>
@@ -400,6 +428,14 @@ tr:hover {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={TABLE_STYLING_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-table-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

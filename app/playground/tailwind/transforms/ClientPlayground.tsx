@@ -1,11 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_TRANSFORMS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind transform utilities",
+    intro:
+        "Utilities like `scale-*`, `rotate-*`, `translate-*`, and `skew-*` map to the CSS `transform` property. Multiple classes compose; Tailwind applies transforms in a consistent order in generated CSS.",
+    syntax: ['className="scale-110 rotate-6 translate-x-4 skew-y-3"'],
+    values: [
+        { term: "scale-*", desc: "Uniform or per-axis scaling (percentage-based)." },
+        { term: "rotate-*", desc: "Rotation in degrees with negative variants." },
+        { term: "translate-x/y-*", desc: "Offset along axes using spacing scale or arbitrary values." },
+        { term: "skew-x/y-*", desc: "Skew transforms in degrees." },
+    ],
+    tip: "Use `origin-*` utilities (not shown here) to change the transform origin when rotations feel off-center.",
+};
 
 export default function TailwindTransformsPlayground() {
     const [scale, setScale] = useState("scale-100");
@@ -16,6 +31,8 @@ export default function TailwindTransformsPlayground() {
     const [skewY, setSkewY] = useState("skew-y-0");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setScale("scale-100");
@@ -49,9 +66,16 @@ export default function TailwindTransformsPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-orange-400 to-red-500">
-                            Transforms
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-orange-400 to-red-500">
+                                Transforms
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind transform utilities in this playground"
+                                title={`What is ${TW_TRANSFORMS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Scale, rotate, translate, and skew.
                         </p>
@@ -152,6 +176,9 @@ export default function TailwindTransformsPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TRANSFORMS_GUIDE} onClose={closeGuide} titleId="tw-transforms-guide-title" />
+            )}
             <Footer />
         </div>
     );

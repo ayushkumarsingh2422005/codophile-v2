@@ -1,11 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
+
+const CSS_BACKGROUNDS_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS backgrounds",
+    intro:
+        "Backgrounds cover solid colors, gradients, images, and how they’re sized, positioned, and repeated. Advanced options include `background-blend-mode`, `background-clip`, and `background-origin` for layering and text clipping effects.",
+    syntax: [
+        "background: linear-gradient(...);",
+        "background-image: url(...); background-size: cover; background-position: center;",
+        "background-blend-mode: multiply;",
+    ],
+    values: [
+        { term: "background / background-color", desc: "Shorthand or explicit color layer behind other background images." },
+        { term: "linear-gradient / radial-gradient", desc: "Smooth color transitions; direction and stops are configurable." },
+        { term: "background-size / position / repeat", desc: "How the image fits, where it anchors, and whether it tiles." },
+        { term: "background-attachment", desc: "scroll (default) vs fixed parallax-style backgrounds." },
+        { term: "background-blend-mode", desc: "How the background layers blend with each other and sometimes the content." },
+        { term: "background-clip", desc: "Whether the background paints to the border, padding, or content box—or text." },
+    ],
+    tip: "For gradient text, combine `background-clip: text` with `-webkit-background-clip: text` and transparent `color`.",
+};
 
 export default function BackgroundClient() {
     const [activeTab, setActiveTab] = useState<"basics" | "image" | "advanced">("basics");
@@ -31,6 +52,8 @@ export default function BackgroundClient() {
     const [bgOrigin, setBgOrigin] = useState("border-box");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset function
     const resetValues = () => {
@@ -104,9 +127,16 @@ export default function BackgroundClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Backgrounds
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Backgrounds
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS backgrounds in this playground"
+                                title={`What is ${CSS_BACKGROUNDS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Master background colors, gradients, images, clipping, and blending.
                         </p>
@@ -279,6 +309,14 @@ export default function BackgroundClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={CSS_BACKGROUNDS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-backgrounds-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, User, Calculator, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+
+const TW_TABS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind tab navigations",
+    intro:
+        "Tab bars are flex rows of links with distinct active styles: underlines (`border-b-2`), filled pills (`rounded-md` + solid `bg-*`), or segmented bars with `divide-x`. Responsive patterns often hide the nav on small screens in favor of a `<select>`.",
+    syntax: ['<nav class="-mb-px flex space-x-8" aria-label="Tabs">', 'class="border-b-2 border-indigo-500 text-indigo-600"'],
+    values: [
+        { term: "space-x-* / flex", desc: "Horizontal spacing between tab triggers." },
+        { term: "border-b / rounded / bg-*", desc: "Visual style for active vs inactive tabs." },
+        { term: "aria-current / aria-label", desc: "Accessibility hooks for the active page." },
+    ],
+    tip: "Keep keyboard focus styles on tab buttons; arrow-key roving tabindex is ideal for production.",
+};
 
 export default function TabsPlaygroundClient() {
     // State
@@ -15,6 +29,8 @@ export default function TabsPlaygroundClient() {
     const [activeTab, setActiveTab] = useState(0);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const tabs = [
         { name: 'My Account', icon: User, content: 'Manage your account details and preferences.' },
@@ -185,9 +201,16 @@ export default function TabsPlaygroundClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
-                            Tabs
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
+                                Tabs
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind tab patterns in this playground"
+                                title={`What is ${TW_TABS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Responsive tab navigations with underline, pill, and bar variations.
                         </p>
@@ -355,6 +378,10 @@ export default function TabsPlaygroundClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TABS_GUIDE} onClose={closeGuide} titleId="tw-tabs-guide-title" />
+            )}
 
             <Footer />
         </div>

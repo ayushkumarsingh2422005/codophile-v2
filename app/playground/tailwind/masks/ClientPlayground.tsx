@@ -1,11 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_MASKS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind mask utilities",
+    intro:
+        "CSS masks control which parts of an element are visible using an image or gradient as an alpha/luminance matte. Utilities here map to `mask-image`, clip, size, position, repeat, compositing, and mode—syntax follows this project’s extended Tailwind naming.",
+    syntax: [
+        "mask-image: linear-gradient(...);",
+        "mask-size; mask-position; mask-repeat; mask-mode; mask-type;",
+    ],
+    values: [
+        { term: "mask image / gradient", desc: "Defines transparency pattern over the element." },
+        { term: "mask-clip / origin", desc: "Which box the mask applies to." },
+        { term: "mask-composite", desc: "How multiple mask layers combine." },
+    ],
+    tip: "Mask support varies; test Safari and Firefox for complex compositing.",
+};
 
 export default function TailwindMasksPlayground() {
     const [maskImage, setMaskImage] = useState("mask-t-from-50%");
@@ -19,6 +36,8 @@ export default function TailwindMasksPlayground() {
     const [maskOrigin, setMaskOrigin] = useState("mask-origin-border");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setMaskImage("mask-t-from-50%");
@@ -55,9 +74,16 @@ export default function TailwindMasksPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-cyan-500">
-                            Mask Effects
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-cyan-500">
+                                Mask Effects
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind mask utilities in this playground"
+                                title={`What is ${TW_MASKS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control an element's mask image and properties.
                         </p>
@@ -199,6 +225,9 @@ export default function TailwindMasksPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_MASKS_GUIDE} onClose={closeGuide} titleId="tw-masks-guide-title" />
+            )}
             <Footer />
         </div>
     );

@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Code } from "lucide-react";
 import Link from "next/link";
+
+const PAGINATION_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS pagination & breadcrumbs",
+    intro:
+        "Pagination UIs are usually a horizontal flex list of links with an active state. This generator outputs flex layouts, list reset, padding, borders, hover, and a breadcrumb variant using `::before` separators between items.",
+    syntax: [
+        ".pagination { display: flex; list-style: none; gap; justify-content; }",
+        ".pagination a.active { background; color; }",
+        ".breadcrumb li + li::before { content: \"/\"; }",
+    ],
+    values: [
+        { term: "justify-content", desc: "Aligns the control group left, center, or right." },
+        { term: "gap / padding / font-size", desc: "Controlled via size presets for tap targets and readability." },
+        { term: "active link", desc: "Highlighted page using background and border color." },
+        { term: "breadcrumb", desc: "Inline trail with slash dividers and last-item styling." },
+    ],
+    tip: "Pair with semantic `<nav aria-label=\"Pagination\">` in real markup.",
+};
 
 type PaginationStyle = "basic" | "bordered" | "rounded" | "breadcrumb";
 type Size = "sm" | "md" | "lg";
@@ -23,6 +42,8 @@ export default function PaginationClient() {
     const [activePage, setActivePage] = useState(2);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset
     const resetValues = () => {
@@ -177,9 +198,16 @@ export default function PaginationClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Pagination
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Pagination
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS pagination in this playground"
+                                title={`What is ${PAGINATION_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Customize navigation links with various styles, sizes, and states.
                         </p>
@@ -349,6 +377,14 @@ export default function PaginationClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={PAGINATION_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-pagination-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

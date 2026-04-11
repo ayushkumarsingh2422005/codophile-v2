@@ -1,11 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Check as CheckIcon, X as XIcon } from "lucide-react";
 import Link from "next/link";
+
+const TW_TOGGLES_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind toggle (switch) pattern",
+    intro:
+        "Switches combine `inline-flex`, `rounded-full`, `transition-*`, `translate-x-*` for the thumb, and `focus:ring-*` for accessibility. State toggles swap background color classes and horizontal translation of the knob.",
+    syntax: [
+        'className="relative inline-flex h-6 w-11 rounded-full transition-colors"',
+        'className="translate-x-0 vs translate-x-5 pointer-events-none rounded-full bg-white shadow"',
+    ],
+    values: [
+        { term: "track + thumb", desc: "Outer pill and inner circle sized with fixed h/w utilities." },
+        { term: "translate-x-*", desc: "Slides the thumb when checked." },
+        { term: "focus:ring-*", desc: "Keyboard focus ring on the button." },
+    ],
+    tip: "Use `role=\"switch\"` and `aria-checked` in real markup, as in the generated snippet.",
+};
 
 export default function TogglesPlaygroundClient() {
     // State
@@ -18,6 +35,8 @@ export default function TogglesPlaygroundClient() {
     const [labelPosition, setLabelPosition] = useState("right"); // left, right, none
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setStyle("simple");
@@ -262,9 +281,16 @@ export default function TogglesPlaygroundClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
-                            Toggles
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
+                                Toggles
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind toggle patterns in this playground"
+                                title={`What is ${TW_TOGGLES_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Accessible switch components with various styles and states.
                         </p>
@@ -380,6 +406,10 @@ export default function TogglesPlaygroundClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TOGGLES_GUIDE} onClose={closeGuide} titleId="tw-toggles-guide-title" />
+            )}
 
             <Footer />
         </div>

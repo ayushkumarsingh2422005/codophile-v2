@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const BACKDROP_FILTER_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS backdrop-filter",
+    intro:
+        "`backdrop-filter` applies filter functions to the region *behind* a semi-transparent element—ideal for glassmorphism. The filtered result is composited with the element’s own background. Use `-webkit-backdrop-filter` for broader Safari support.",
+    syntax: [
+        "backdrop-filter: blur(12px) saturate(180%);",
+        "-webkit-backdrop-filter: blur(12px);",
+    ],
+    values: [
+        { term: "blur", desc: "Gaussian blur of the backdrop; larger values look more frosted." },
+        { term: "brightness / contrast / saturate", desc: "Adjust tonal response of the area behind the element." },
+        { term: "grayscale / sepia / hue-rotate / invert", desc: "Color and tone shifts applied to the backdrop." },
+        { term: "opacity", desc: "Affects the filtered backdrop layer’s contribution (not the element’s own opacity)." },
+        { term: "drop-shadow", desc: "Adds a shadow based on the backdrop’s alpha shape." },
+    ],
+    tip: "The element usually needs partial transparency (or a transparent area) for the backdrop effect to be visible.",
+};
 
 export default function BackdropFilterClient() {
     // State for all backdrop-filter properties
@@ -26,6 +45,8 @@ export default function BackdropFilterClient() {
     const [dsColor, setDsColor] = useState("#000000");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset function
     const resetValues = () => {
@@ -83,9 +104,16 @@ export default function BackdropFilterClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Backdrop Filter
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Backdrop Filter
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS backdrop-filter in this playground"
+                                title={`What is ${BACKDROP_FILTER_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Apply graphical effects to the area behind an element.
                         </p>
@@ -204,6 +232,14 @@ export default function BackdropFilterClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={BACKDROP_FILTER_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-backdrop-filter-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

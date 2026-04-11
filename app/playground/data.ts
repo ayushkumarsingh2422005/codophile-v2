@@ -64,6 +64,11 @@ export const playgroundData = {
                 description: "Master CSS Grid layout with interactive controls for grid-template-columns, grid-template-rows, gap, and grid-item placement.",
                 keywords: ["css grid", "grid layout", "grid-template-columns", "grid-gap", "grid-area"]
             },
+            outline: {
+                title: "CSS Outline Playground - outline-style, width, color, offset & shorthand",
+                description: "Experiment with CSS outline: outline-style, outline-width (thin, medium, thick, or px), outline-color including invert, outline-offset, border-radius with outline, and the outline shorthand. Learn how outline differs from border.",
+                keywords: ["css outline", "outline-style", "outline-width", "outline-color", "outline-offset", "outline shorthand", "outline invert", "css focus ring"]
+            },
             tooltip: {
                 title: "CSS Tooltip Playground - Positioning & Effects",
                 description: "Design and customize CSS tooltips. Experiment with positioning, arrows, colors, and animations for engaging user interfaces.",

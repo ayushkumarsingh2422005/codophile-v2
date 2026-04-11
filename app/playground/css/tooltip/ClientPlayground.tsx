@@ -1,11 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, MousePointer2 } from "lucide-react";
 import Link from "next/link";
+
+const TOOLTIP_CSS_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS-only tooltips",
+    intro:
+        "This pattern uses a positioned container and a child that is hidden until `:hover`. Opacity transitions create a fade; optional `::after` borders form a CSS triangle arrow. Position values depend on whether the tooltip sits above, below, or beside the trigger.",
+    syntax: [
+        ".wrap { position: relative; }",
+        ".tip { position: absolute; opacity: 0; transition: opacity; }",
+        ".wrap:hover .tip { opacity: 1; }",
+    ],
+    values: [
+        { term: "position + offsets", desc: "Places the bubble using top/bottom/left/right and transforms for centering." },
+        { term: "visibility / opacity", desc: "Keeps the tip non-interactive until shown while animating fade." },
+        { term: "::after arrow", desc: "Zero-size box with colored borders to mimic a caret." },
+    ],
+    tip: "For keyboard users, mirror hover behavior with `:focus-within` in production CSS.",
+};
 
 export default function TooltipClient() {
     // State
@@ -18,6 +36,8 @@ export default function TooltipClient() {
     const [width, setWidth] = useState(120);
     const [fadeInDuration, setFadeInDuration] = useState(0.3);
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Constants
     const arrowSize = 5;
@@ -134,9 +154,16 @@ export default function TooltipClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Tooltip Generator
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Tooltip Generator
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS tooltips in this playground"
+                                title={`What is ${TOOLTIP_CSS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Create custom CSS tooltips with positioning, arrows, and animations.
                         </p>
@@ -275,6 +302,14 @@ export default function TooltipClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={TOOLTIP_CSS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-tooltip-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

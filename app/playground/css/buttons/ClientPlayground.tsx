@@ -1,16 +1,37 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, MousePointer2, Layers, Palette, BoxSelect } from "lucide-react";
 import Link from "next/link";
+
+const CSS_BUTTONS_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS button styling",
+    intro:
+        "This playground composes typical button CSS: typography, spacing, borders, `box-shadow`, `transition`, and `:hover` rules. Optional flex group snippets show how to lay out button groups.",
+    syntax: [
+        ".btn { background; color; padding; border-radius; transition; }",
+        ".btn:hover { background; color; }",
+        ".button-group { display: flex; gap: ...; }",
+    ],
+    values: [
+        { term: "padding / border-radius", desc: "Hit target size and corner rounding." },
+        { term: "transition", desc: "Smooths hover color and shadow changes." },
+        { term: "box-shadow", desc: "Elevation or glow; can be toggled off." },
+        { term: ":hover", desc: "Alternate colors when the pointer is over the button." },
+    ],
+    tip: "For accessibility, pair visible `:focus` or `:focus-visible` styles with hover (not generated here).",
+};
 
 export default function ButtonsClient() {
     // --- State ---
     const [activeTab, setActiveTab] = useState<"style" | "hover" | "shadow" | "group">("style");
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Style Props
     const [buttonText, setButtonText] = useState("Click Me");
@@ -137,9 +158,16 @@ export default function ButtonsClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            CSS Buttons
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                CSS Buttons
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS button styling in this playground"
+                                title={`What is ${CSS_BUTTONS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Design beautiful buttons with custom styles, hover effects, and group layouts.
                         </p>
@@ -380,6 +408,14 @@ export default function ButtonsClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={CSS_BUTTONS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-buttons-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

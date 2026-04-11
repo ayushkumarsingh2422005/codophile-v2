@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_ANIMATIONS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind animation & transition utilities",
+    intro:
+        "`animate-*` applies predefined `@keyframes` (when configured). `transition-*`, `duration-*`, and `ease-*` set up CSS transitions on properties that change—often paired with hover toggles in real UIs.",
+    syntax: ['className="animate-bounce transition-all duration-300 ease-in-out"'],
+    values: [
+        { term: "animate-*", desc: "Named animations such as spin, pulse, bounce (project-dependent)." },
+        { term: "transition-*", desc: "Which properties transition when values change." },
+        { term: "duration-* / ease-*", desc: "Timing length and easing curve." },
+    ],
+    tip: "Keyframe animations differ from transitions: animations loop or run once; transitions interpolate between two states.",
+};
 
 export default function TailwindAnimationsPlayground() {
     const [animate, setAnimate] = useState("animate-none");
@@ -15,6 +29,8 @@ export default function TailwindAnimationsPlayground() {
     const [hover, setHover] = useState(false);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setAnimate("animate-none");
@@ -46,9 +62,16 @@ export default function TailwindAnimationsPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-violet-500 to-purple-600">
-                            Animations
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-violet-500 to-purple-600">
+                                Animations
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind animation utilities in this playground"
+                                title={`What is ${TW_ANIMATIONS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Transitions and keyframe animations.
                         </p>
@@ -140,6 +163,9 @@ export default function TailwindAnimationsPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_ANIMATIONS_GUIDE} onClose={closeGuide} titleId="tw-animations-guide-title" />
+            )}
             <Footer />
         </div>
     );

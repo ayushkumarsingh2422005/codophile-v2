@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_TABLE_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind table utilities",
+    intro:
+        "Tables use `table-auto` or `table-fixed`, `border-collapse` vs `border-separate` with `border-spacing-*`, and border/padding utilities on cells. Striping and hover use `even:` / `odd:` or `hover:` on rows—mirroring common Flowbite-style patterns.",
+    syntax: ['<table className="w-full border-collapse border border-gray-600">', '<td className="p-4 align-middle">'],
+    values: [
+        { term: "table-auto / table-fixed", desc: "Column width algorithm." },
+        { term: "border-collapse / border-separate", desc: "Shared vs distinct cell borders." },
+        { term: "align-* / p-* / border-*", desc: "Cell alignment and spacing utilities." },
+    ],
+    tip: "Wrap wide tables in `overflow-x-auto` for responsive scrolling.",
+};
 
 export default function TablePlaygroundClient() {
     // State
@@ -24,6 +38,8 @@ export default function TablePlaygroundClient() {
     const [width, setWidth] = useState("w-full");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setLayout("table-auto");
@@ -149,9 +165,16 @@ export default function TablePlaygroundClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-teal-400">
-                            Table Utilities
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-teal-400">
+                                Table Utilities
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind table utilities in this playground"
+                                title={`What is ${TW_TABLE_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control table layouts, borders, and spacing with Tailwind classes.
                         </p>
@@ -311,6 +334,10 @@ export default function TablePlaygroundClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TABLE_GUIDE} onClose={closeGuide} titleId="tw-table-guide-title" />
+            )}
 
             <Footer />
         </div>

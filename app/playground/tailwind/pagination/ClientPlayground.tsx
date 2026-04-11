@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Code } from "lucide-react";
 import Link from "next/link";
+
+const TW_PAGINATION_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind pagination & breadcrumbs",
+    intro:
+        "Flex utilities lay out `<ul>` rows; `gap-*` spaces items; borders and `rounded-*` style pills; `bg-{color}-500` highlights the active page. Breadcrumb mode swaps to inline items with SVG chevrons between links.",
+    syntax: ['className="flex list-none justify-center gap-2"', 'className="px-4 py-2 rounded border transition-all"'],
+    values: [
+        { term: "justify-*", desc: "Aligns the control cluster horizontally." },
+        { term: "gap-* + padding utilities", desc: "Spacing and hit targets." },
+        { term: "hover: / transition-all", desc: "Interactive feedback on links." },
+    ],
+    tip: "Dynamic class names like `bg-${color}-500` require safelisting in Tailwind JIT—this demo assumes those classes exist in your build.",
+};
 
 type PaginationStyle = "basic" | "bordered" | "rounded" | "breadcrumb";
 type Size = "sm" | "md" | "lg";
@@ -24,6 +38,8 @@ export default function PaginationClient() {
     const [activePage, setActivePage] = useState(2);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset
     const resetValues = () => {
@@ -172,9 +188,16 @@ export default function PaginationClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Pagination
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Pagination
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind pagination in this playground"
+                                title={`What is ${TW_PAGINATION_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Customize navigation links with Tailwind utility classes.
                         </p>
@@ -376,6 +399,10 @@ export default function PaginationClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_PAGINATION_GUIDE} onClose={closeGuide} titleId="tw-pagination-guide-title" />
+            )}
 
             <Footer />
         </div>

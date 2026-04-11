@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Plus, Trash2, Layers } from "lucide-react";
 import Link from "next/link";
+
+const BOX_SHADOW_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS box-shadow",
+    intro:
+        "`box-shadow` draws one or more shadows around an element’s border box. Each layer lists optional `inset`, X/Y offset, blur radius, spread radius, and color. Multiple shadows are comma-separated; earlier layers paint on top.",
+    syntax: [
+        "box-shadow: offset-x offset-y blur spread color;",
+        "box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.15);",
+    ],
+    values: [
+        { term: "offset-x / offset-y", desc: "How far the shadow is shifted from the element." },
+        { term: "blur-radius", desc: "Gaussian blur; 0 gives a hard edge." },
+        { term: "spread-radius", desc: "Expands or shrinks the shadow before blur." },
+        { term: "color", desc: "Often semi-transparent black or brand colors for depth." },
+        { term: "inset", desc: "Draws the shadow inside the box for pressed or inset UI." },
+    ],
+    tip: "Stack soft outer shadows with tighter darker ones to mimic realistic elevation.",
+};
 
 interface ShadowLayer {
     id: string;
@@ -23,6 +42,8 @@ export default function BoxShadowClient() {
     ]);
     const [activeLayerId, setActiveLayerId] = useState<string>("layer-1");
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Get active layer safely
     const activeLayer = layers.find(l => l.id === activeLayerId) || layers[0];
@@ -92,9 +113,16 @@ export default function BoxShadowClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Box Shadow
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Box Shadow
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS box-shadow in this playground"
+                                title={`What is ${BOX_SHADOW_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Add shadow effects around an element's frame. Support for multiple layers.
                         </p>
@@ -259,6 +287,14 @@ export default function BoxShadowClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={BOX_SHADOW_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-box-shadow-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

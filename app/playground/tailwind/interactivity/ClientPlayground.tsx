@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_INTERACTIVITY_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind interactivity utilities",
+    intro:
+        "`cursor-*` exposes mouse cursors; `select-*` controls text selection; `pointer-events-*` lets you disable hit testing for overlays or decorative layers. These map directly to CSS `cursor`, `user-select`, and `pointer-events`.",
+    syntax: ['className="cursor-not-allowed select-none pointer-events-none"'],
+    values: [
+        { term: "cursor-*", desc: "pointer, wait, grab, not-allowed, etc." },
+        { term: "select-*", desc: "Whether text can be selected (auto, none, all)." },
+        { term: "pointer-events-*", desc: "auto vs none for passing clicks through." },
+    ],
+    tip: "Use `pointer-events-none` on decorative overlays so clicks reach elements beneath.",
+};
 
 export default function TailwindInteractivityPlayground() {
     const [cursor, setCursor] = useState("cursor-default");
@@ -13,6 +27,8 @@ export default function TailwindInteractivityPlayground() {
     const [pointerEvents, setPointerEvents] = useState("pointer-events-auto");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setCursor("cursor-default");
@@ -45,9 +61,16 @@ export default function TailwindInteractivityPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-yellow-400 to-amber-500">
-                            Interactivity
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-yellow-400 to-amber-500">
+                                Interactivity
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind interactivity utilities in this playground"
+                                title={`What is ${TW_INTERACTIVITY_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control cursors, selection, and pointer events.
                         </p>
@@ -128,6 +151,9 @@ export default function TailwindInteractivityPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_INTERACTIVITY_GUIDE} onClose={closeGuide} titleId="tw-interactivity-guide-title" />
+            )}
             <Footer />
         </div>
     );

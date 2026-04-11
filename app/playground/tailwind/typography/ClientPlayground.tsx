@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_TYPOGRAPHY_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind typography utilities",
+    intro:
+        "Font size (`text-*`), weight (`font-*`), alignment (`text-*`), color (`text-*`), decoration, `leading-*`, and `tracking-*` map to standard CSS with the design scale. They combine as utility strings on text nodes or containers.",
+    syntax: ['className="text-lg font-semibold text-center leading-relaxed tracking-wide"'],
+    values: [
+        { term: "text-* (size)", desc: "Stepped scale from xs through 9xl." },
+        { term: "font-* (weight)", desc: "thin through black weights where the font supports them." },
+        { term: "leading-* / tracking-*", desc: "Line height and letter-spacing presets." },
+    ],
+    tip: "Use `prose` from @tailwindcss/typography for article blocks—this playground focuses on atomic utilities.",
+};
 
 export default function TailwindTypographyPlayground() {
     const [fontSize, setFontSize] = useState("text-base");
@@ -17,6 +31,8 @@ export default function TailwindTypographyPlayground() {
     const [tracking, setTracking] = useState("tracking-normal");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setFontSize("text-base");
@@ -51,9 +67,16 @@ export default function TailwindTypographyPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 to-indigo-500">
-                            Typography
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-sky-400 to-indigo-500">
+                                Typography
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind typography utilities in this playground"
+                                title={`What is ${TW_TYPOGRAPHY_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control font size, weight, and spacing.
                         </p>
@@ -163,6 +186,9 @@ export default function TailwindTypographyPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TYPOGRAPHY_GUIDE} onClose={closeGuide} titleId="tw-typography-guide-title" />
+            )}
             <Footer />
         </div>
     );

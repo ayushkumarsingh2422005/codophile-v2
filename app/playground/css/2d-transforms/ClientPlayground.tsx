@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Scaling } from "lucide-react";
 import Link from "next/link";
+
+const TWO_D_TRANSFORMS_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS 2D transforms",
+    intro:
+        "The `transform` property applies 2D functions in order: rotation, skew, translation, and scale. `transform-origin` sets the anchor point (as percentages of the box) for those operations.",
+    syntax: [
+        "transform: rotate(angle) skew(ax, ay) translate(tx, ty) scale(sx, sy);",
+        "transform-origin: x y;",
+    ],
+    values: [
+        { term: "translate", desc: "Moves the element along X and Y without affecting layout flow of siblings." },
+        { term: "scale", desc: "Stretches or shrinks the element on each axis; 1 is unchanged." },
+        { term: "rotate", desc: "Turns the element around the origin in the 2D plane." },
+        { term: "skew", desc: "Slants the element along X and/or Y." },
+        { term: "transform-origin", desc: "Where rotations, scales, and skews are anchored—often center (50% 50%)." },
+    ],
+    tip: "Function order in `transform` matters: the same functions in a different order can look different.",
+};
 
 export default function TwoDTransformsClient() {
     // Transform Origin
@@ -22,6 +41,8 @@ export default function TwoDTransformsClient() {
     const [scaleY, setScaleY] = useState(1);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset function
     const resetValues = () => {
@@ -63,9 +84,16 @@ export default function TwoDTransformsClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            2D Transforms
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                2D Transforms
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS 2D transforms in this playground"
+                                title={`What is ${TWO_D_TRANSFORMS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Manipulate elements in 2D space: rotate, scale, skew, and translate.
                         </p>
@@ -178,6 +206,14 @@ export default function TwoDTransformsClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={TWO_D_TRANSFORMS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-2d-transforms-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

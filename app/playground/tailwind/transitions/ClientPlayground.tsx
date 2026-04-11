@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, MousePointer2 } from "lucide-react";
 import Link from "next/link";
+
+const TW_TRANSITIONS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind transition utilities",
+    intro:
+        "`transition-*` picks which properties animate; `duration-*`, `ease-*`, and `delay-*` set timing. They compile to the CSS `transition` longhands. Hovering the demo toggles extra transform/background classes so you can see the easing.",
+    syntax: ['className="transition-all duration-300 ease-in-out delay-75"'],
+    values: [
+        { term: "transition-all / transition-colors / …", desc: "Limits which properties participate." },
+        { term: "duration-*", desc: "Length of the interpolation." },
+        { term: "ease-* / delay-*", desc: "Easing curve and start delay." },
+    ],
+    tip: "Prefer `transition-colors` over `transition-all` when only colors change—it avoids animating unintended properties.",
+};
 
 export default function TailwindTransitionsPlayground() {
     const [property, setProperty] = useState("transition-all");
@@ -16,6 +30,8 @@ export default function TailwindTransitionsPlayground() {
     const [hovered, setHovered] = useState(false);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setProperty("transition-all");
@@ -50,9 +66,16 @@ export default function TailwindTransitionsPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-indigo-400 to-purple-500">
-                            Transitions
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-indigo-400 to-purple-500">
+                                Transitions
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind transition utilities in this playground"
+                                title={`What is ${TW_TRANSITIONS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control state-change animations and timing.
                         </p>
@@ -184,6 +207,9 @@ export default function TailwindTransitionsPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_TRANSITIONS_GUIDE} onClose={closeGuide} titleId="tw-transitions-guide-title" />
+            )}
             <Footer />
         </div>
     );
