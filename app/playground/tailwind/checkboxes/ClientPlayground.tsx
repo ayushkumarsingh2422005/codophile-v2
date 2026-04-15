@@ -1,11 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_CHECKBOXES_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind checkbox lists",
+    intro:
+        "Native `<input type=\"checkbox\">` elements are styled with `h-* w-*`, `rounded-*`, border colors, and `text-*` / `focus:ring-*` for the checked color. Layout uses `flex`, `items-start`, and `space-y-*` between rows; `fieldset` + `legend` group related options.",
+    syntax: [
+        'className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"',
+        '<div class="relative flex items-start">...</div>',
+    ],
+    values: [
+        { term: "size + rounded", desc: "Hit area and corner shape of the box." },
+        { term: "text-* + focus:ring-*", desc: "Checked color and focus ring matching brand." },
+        { term: "layout wrappers", desc: "Align checkbox with label and optional description." },
+    ],
+    tip: "Associate each input with its label via `id` / `for` and wire `aria-describedby` when helper text exists.",
+};
 
 export default function CheckboxesPlaygroundClient() {
     // State
@@ -16,6 +33,8 @@ export default function CheckboxesPlaygroundClient() {
     const [isDisabled, setIsDisabled] = useState(false);
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Mock Data for List
     const [items, setItems] = useState([
@@ -139,9 +158,16 @@ export default function CheckboxesPlaygroundClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
-                            Checkboxes
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
+                                Checkboxes
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind checkbox patterns in this playground"
+                                title={`What is ${TW_CHECKBOXES_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Accessible checkbox lists with detailed descriptions and layouts.
                         </p>
@@ -292,6 +318,10 @@ export default function CheckboxesPlaygroundClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_CHECKBOXES_GUIDE} onClose={closeGuide} titleId="tw-checkboxes-guide-title" />
+            )}
 
             <Footer />
         </div>

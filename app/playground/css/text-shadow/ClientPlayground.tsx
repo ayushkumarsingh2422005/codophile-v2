@@ -1,11 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Plus, Trash2, Layers, Type } from "lucide-react";
 import Link from "next/link";
+
+const TEXT_SHADOW_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS text-shadow",
+    intro:
+        "`text-shadow` paints one or more shadows behind glyph shapes. Each layer lists horizontal offset, vertical offset, blur radius, and color—comma-separated for stacking glows or outlines.",
+    syntax: [
+        "text-shadow: 2px 2px 4px rgba(0,0,0,0.5);",
+        "text-shadow: 0 0 8px #0ff, 0 0 16px #f0f;",
+    ],
+    values: [
+        { term: "offset-x / offset-y", desc: "Shift of the shadow relative to the text." },
+        { term: "blur-radius", desc: "Softens the shadow; 0 keeps a sharp duplicate." },
+        { term: "color", desc: "Often semi-transparent black or neon colors for glow effects." },
+    ],
+    tip: "Multiple layers can fake outlines or neon; order is paint order (first on top).",
+};
 
 interface ShadowLayer {
     id: string;
@@ -22,6 +39,8 @@ export default function TextShadowClient() {
     const [activeLayerId, setActiveLayerId] = useState<string>("layer-1");
     const [text, setText] = useState("CodoPhile");
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Get active layer safely
     const activeLayer = layers.find(l => l.id === activeLayerId) || layers[0];
@@ -83,9 +102,16 @@ export default function TextShadowClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Text Shadow
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Text Shadow
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS text-shadow in this playground"
+                                title={`What is ${TEXT_SHADOW_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Add shadow effects to text. Support for multiple layers.
                         </p>
@@ -242,6 +268,14 @@ export default function TextShadowClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={TEXT_SHADOW_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-text-shadow-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

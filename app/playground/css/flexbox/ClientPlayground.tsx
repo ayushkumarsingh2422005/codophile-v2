@@ -1,11 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, LayoutGrid, BoxSelect } from "lucide-react";
 import Link from "next/link";
+
+const FLEXBOX_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS Flexbox",
+    intro:
+        "Flexbox lays out a one-dimensional row or column. The container sets `display: flex` plus alignment and wrapping; children use `flex-grow`, `flex-shrink`, `flex-basis`, `align-self`, and `order`.",
+    syntax: [
+        ".container { display: flex; flex-direction; flex-wrap; justify-content; align-items; gap; }",
+        ".item { flex: grow shrink basis; align-self; order; }",
+    ],
+    values: [
+        { term: "flex-direction / flex-wrap", desc: "Main axis direction and whether items wrap to new lines." },
+        { term: "justify-content", desc: "Distribution of items along the main axis." },
+        { term: "align-items / align-content", desc: "Cross-axis alignment for items and for wrapped lines." },
+        { term: "gap", desc: "Spacing between items without margins." },
+        { term: "flex (grow/shrink/basis)", desc: "How items grow, shrink, and their ideal starting size." },
+    ],
+    tip: "Switch tabs here to copy container rules vs. a single selected item’s rules.",
+};
 
 interface FlexItemStyle {
     id: number;
@@ -42,6 +61,8 @@ export default function FlexboxClient() {
 
     const [items, setItems] = useState<FlexItemStyle[]>(defaultItems);
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Get active item
     const activeItem = items.find(i => i.id === activeItemId) || items[0];
@@ -107,9 +128,16 @@ export default function FlexboxClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Flexbox Layout
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Flexbox Layout
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS Flexbox in this playground"
+                                title={`What is ${FLEXBOX_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Master flexible layouts by controlling container and item properties.
                         </p>
@@ -354,6 +382,14 @@ export default function FlexboxClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={FLEXBOX_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-flexbox-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

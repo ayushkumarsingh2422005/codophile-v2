@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_BACKGROUNDS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind background utilities",
+    intro:
+        "Gradient presets combine direction helpers (`bg-linear-to-*`) with `from-*`, optional `via-*`, and `to-*` color stops from the palette. `bg-cover` and related utilities map to `background-size` for image-like fills.",
+    syntax: ['className="bg-linear-to-r from-pink-500 to-rose-500 bg-cover"'],
+    values: [
+        { term: "bg-linear-to-*", desc: "Linear gradient angle / direction helpers (project-specific syntax)." },
+        { term: "from / via / to", desc: "Color stops along the gradient." },
+        { term: "bg-cover / bg-contain", desc: "How a background image (or gradient box) fills its area." },
+    ],
+    tip: "Arbitrary values like `from-[#ff00aa]` work in full Tailwind for one-off brand colors.",
+};
 
 export default function TailwindBackgroundsPlayground() {
     const [gradientDirection, setGradientDirection] = useState("bg-linear-to-r");
@@ -15,6 +29,8 @@ export default function TailwindBackgroundsPlayground() {
     const [bgSize, setBgSize] = useState("bg-cover");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setGradientDirection("bg-linear-to-r");
@@ -48,9 +64,16 @@ export default function TailwindBackgroundsPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-pink-500 to-rose-500">
-                            Backgrounds
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-pink-500 to-rose-500">
+                                Backgrounds
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind background utilities in this playground"
+                                title={`What is ${TW_BACKGROUNDS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Create gradients and manage background properties.
                         </p>
@@ -129,6 +152,9 @@ export default function TailwindBackgroundsPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_BACKGROUNDS_GUIDE} onClose={closeGuide} titleId="tw-backgrounds-guide-title" />
+            )}
             <Footer />
         </div>
     );

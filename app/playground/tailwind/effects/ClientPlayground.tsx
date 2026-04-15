@@ -1,11 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_EFFECTS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind effects & filters",
+    intro:
+        "Utilities here map to CSS `box-shadow`, `opacity`, `filter` blur, and `mix-blend-mode`. They combine as classes on one element; order in the class string does not change cascade—Tailwind generates rules with consistent specificity.",
+    syntax: [
+        "class=\"shadow-lg opacity-75 blur-sm mix-blend-multiply\"",
+        "/* compiles to box-shadow, opacity, filter, mix-blend-mode */",
+    ],
+    values: [
+        { term: "shadow-*", desc: "Preset elevation shadows from none through 2xl and inner." },
+        { term: "opacity-*", desc: "Fixed opacity steps from 0 to 100." },
+        { term: "blur-*", desc: "backdrop-style Gaussian blur via `filter: blur(...)`." },
+        { term: "mix-blend-*", desc: "How this element blends with backdrop content (multiply, screen, overlay, …)." },
+    ],
+    tip: "Blend modes need overlapping colors behind the element to be obvious—this preview layers gradients for that reason.",
+};
 
 export default function TailwindEffectsPlayground() {
     const [shadow, setShadow] = useState("shadow-lg");
@@ -14,6 +32,8 @@ export default function TailwindEffectsPlayground() {
     const [mixBlend, setMixBlend] = useState("mix-blend-normal");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setShadow("shadow-lg");
@@ -45,9 +65,16 @@ export default function TailwindEffectsPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-fuchsia-500">
-                            Effects & Filters
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-fuchsia-500">
+                                Effects & Filters
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind effects utilities in this playground"
+                                title={`What is ${TW_EFFECTS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Apply shadows, opacity, and blend modes.
                         </p>
@@ -133,6 +160,13 @@ export default function TailwindEffectsPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={TW_EFFECTS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="tw-effects-guide-title"
+                />
+            )}
             <Footer />
         </div>
     );

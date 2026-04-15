@@ -30,6 +30,13 @@ const categories = [
         color: "from-pink-500 to-rose-500"
     },
     {
+        title: "Outline",
+        description: "Draw outlines outside the border: width, style, color, invert, offset, and radius.",
+        icon: "/icons/Borders-and-Radius.png",
+        href: "/playground/css/outline",
+        color: "from-emerald-500 to-teal-500"
+    },
+    {
         title: "3D Transforms",
         description: "Master perspective, rotateX/Y/Z, and translate3d in 3D space.",
         icon: "/icons/3D-transforms.png",

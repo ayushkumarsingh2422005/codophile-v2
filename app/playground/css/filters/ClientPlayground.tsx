@@ -1,11 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
+
+const CSS_FILTERS_GUIDE: PlaygroundGuideDoc = {
+    title: "CSS filter",
+    intro:
+        "`filter` applies graphical operations to an element’s rendered content (and descendants), unlike `backdrop-filter` which targets what is *behind* the element. Functions can be combined in one declaration.",
+    syntax: ["filter: blur(4px) brightness(1.1) contrast(1.05);", "filter: drop-shadow(2px 4px 6px #000);"],
+    values: [
+        { term: "blur", desc: "Blurs the entire subtree’s pixels." },
+        { term: "brightness / contrast / saturate", desc: "Tone and intensity adjustments." },
+        { term: "grayscale / sepia / hue-rotate / invert", desc: "Color transformations." },
+        { term: "opacity", desc: "Uniform transparency of the filtered result." },
+        { term: "drop-shadow", desc: "Shadow that follows the alpha shape of the content." },
+    ],
+    tip: "Heavy filters can affect performance; prefer will-change or simpler stacks for animated UIs.",
+};
 
 export default function FiltersClient() {
     // State for all filter properties
@@ -26,6 +42,8 @@ export default function FiltersClient() {
     const [dsColor, setDsColor] = useState("#000000");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Reset function
     const resetValues = () => {
@@ -84,9 +102,16 @@ export default function FiltersClient() {
                         <Link href="/playground/css" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to CSS
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            CSS Filters
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                CSS Filters
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about CSS filter in this playground"
+                                title={`What is ${CSS_FILTERS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Apply graphical effects like blur or color shift to an element.
                         </p>
@@ -196,6 +221,14 @@ export default function FiltersClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal
+                    doc={CSS_FILTERS_GUIDE}
+                    onClose={closeGuide}
+                    titleId="css-filters-guide-title"
+                />
+            )}
 
             <Footer />
         </div>

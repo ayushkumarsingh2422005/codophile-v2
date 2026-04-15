@@ -49,6 +49,13 @@ const categories = [
         color: "from-teal-400 to-emerald-500"
     },
     {
+        title: "Outline",
+        description: "Tune outline width, offset, style, and color for accessible focus rings.",
+        icon: "/icons/Borders-and-Radius.png",
+        href: "/playground/tailwind/outline",
+        color: "from-emerald-400 to-teal-500"
+    },
+    {
         title: "Effects & Filters",
         description: "Apply shadows, opacity, mix-blend modes, and backdrop blurs.",
         icon: "/icons/filters.png",

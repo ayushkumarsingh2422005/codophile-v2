@@ -1,11 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, LayoutGrid, BoxSelect } from "lucide-react";
 import Link from "next/link";
+
+const TW_GRID_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind Grid utilities",
+    intro:
+        "`grid`, `grid-cols-*`, `grid-rows-*`, and `gap-*` define the track layout; alignment utilities (`justify-items`, `items-*`, `justify-*`, `content-*`) distribute space. Item utilities (`col-span-*`, `row-span-*`, `col-start-*`, etc.) place cells—mirroring CSS Grid with shorter class names.",
+    syntax: ['className="grid grid-cols-3 grid-rows-3 gap-4 justify-items-center items-stretch"'],
+    values: [
+        { term: "grid-cols-* / grid-rows-*", desc: "Template tracks using the spacing scale or arbitrary values." },
+        { term: "gap-*", desc: "Row and column gutters." },
+        { term: "col-span / row-span / line placement", desc: "How far each item stretches across tracks." },
+    ],
+    tip: "Use the container vs. items tab here to copy the right class string for your layer.",
+};
 
 interface GridItemStyle {
     id: number;
@@ -44,6 +58,8 @@ export function GridClient() {
 
     const [items, setItems] = useState<GridItemStyle[]>(defaultItems);
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const addItem = () => {
         const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
@@ -136,9 +152,16 @@ export function GridClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Tailwind Grid Layout
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Tailwind Grid Layout
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind Grid utilities in this playground"
+                                title={`What is ${TW_GRID_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Master grid layouts using Tailwind utility classes.
                         </p>
@@ -373,6 +396,10 @@ export function GridClient() {
                     </div>
                 </motion.div>
             </div >
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_GRID_GUIDE} onClose={closeGuide} titleId="tw-grid-guide-title" />
+            )}
 
             <Footer />
         </div >

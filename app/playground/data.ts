@@ -64,6 +64,11 @@ export const playgroundData = {
                 description: "Master CSS Grid layout with interactive controls for grid-template-columns, grid-template-rows, gap, and grid-item placement.",
                 keywords: ["css grid", "grid layout", "grid-template-columns", "grid-gap", "grid-area"]
             },
+            outline: {
+                title: "CSS Outline Playground - outline-style, width, color, offset & shorthand",
+                description: "Experiment with CSS outline: outline-style, outline-width (thin, medium, thick, or px), outline-color including invert, outline-offset, border-radius with outline, and the outline shorthand. Learn how outline differs from border.",
+                keywords: ["css outline", "outline-style", "outline-width", "outline-color", "outline-offset", "outline shorthand", "outline invert", "css focus ring"]
+            },
             tooltip: {
                 title: "CSS Tooltip Playground - Positioning & Effects",
                 description: "Design and customize CSS tooltips. Experiment with positioning, arrows, colors, and animations for engaging user interfaces.",
@@ -105,6 +110,11 @@ export const playgroundData = {
                 title: "Tailwind Borders & Rings - Border Utilities Playground",
                 description: "Master Tailwind border utilities including border-width, rounded corners, border-color, and focus ring effects.",
                 keywords: ["tailwind borders", "rounded corners", "border utilities", "focus ring", "tailwind rounded"]
+            },
+            outline: {
+                title: "Tailwind Outline Playground - Outline Width, Offset & Color",
+                description: "Experiment with Tailwind outline utilities including outline width, outline-offset, outline style, outline color, and inset outlines for focus rings.",
+                keywords: ["tailwind outline", "outline-offset", "outline utilities", "focus ring tailwind", "outline-inset"]
             },
             effects: {
                 title: "Tailwind Effects & Filters - Shadow, Opacity, Blend Modes",

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, MousePointer2, Layers, Palette, BoxSelect } from "lucide-react";
 import Link from "next/link";
 
@@ -58,10 +59,25 @@ const SHADOW_OPTIONS = [
     { label: "2XL", value: "shadow-2xl" },
 ];
 
+const TW_BUTTONS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind button utilities",
+    intro:
+        "Buttons are composed from palette-based `bg-*`, `text-*`, `px/py`, `rounded-*`, optional `border-*`, `shadow-*`, and `hover:` / `focus:` variants. This playground concatenates class strings—ensure dynamic colors are safelisted in your Tailwind config.",
+    syntax: ['className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"'],
+    values: [
+        { term: "spacing + rounded", desc: "Padding and corner radius from the design scale." },
+        { term: "hover: variants", desc: "Alternate colors on pointer hover." },
+        { term: "focus:ring-*", desc: "Visible focus rings for keyboard users." },
+    ],
+    tip: "Use component libraries or `@apply` in CSS when the same bundle of classes repeats.",
+};
+
 export default function ButtonsClient() {
     // --- State ---
     const [activeTab, setActiveTab] = useState<"style" | "hover" | "shadow" | "group">("style");
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     // Content
     const [buttonText, setButtonText] = useState("Button");
@@ -177,9 +193,16 @@ export default function ButtonsClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
-                            Tailwind Buttons
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-cyan-400 to-purple-400">
+                                Tailwind Buttons
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind button utilities in this playground"
+                                title={`What is ${TW_BUTTONS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Design Tailwind buttons using utility classes.
                         </p>
@@ -429,6 +452,10 @@ export default function ButtonsClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_BUTTONS_GUIDE} onClose={closeGuide} titleId="tw-buttons-guide-title" />
+            )}
 
             <Footer />
         </div>

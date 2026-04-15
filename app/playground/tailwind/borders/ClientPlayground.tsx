@@ -1,11 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check } from "lucide-react";
 import Link from "next/link";
+
+const TW_BORDERS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind borders & radius",
+    intro:
+        "`rounded-*` sets `border-radius`; `border-*` width utilities set thickness; `border-color` utilities map to palette names; `border-solid` and friends set `border-style`. Together they replace most handwritten border declarations.",
+    syntax: ['className="rounded-lg border-2 border-cyan-500 border-solid"'],
+    values: [
+        { term: "rounded-*", desc: "Corner radii from none through full (pill/circle contexts)." },
+        { term: "border-* (width)", desc: "0, 2, 4, 8… pixel widths via default scale." },
+        { term: "border-{color}", desc: "Theme colors applied to border-color." },
+        { term: "border-dashed / dotted / …", desc: "Standard border styles." },
+    ],
+    tip: "Ring utilities (`ring-*`) are separate from borders and stack for focus rings in Tailwind.",
+};
 
 export default function TailwindBordersPlayground() {
     const [rounded, setRounded] = useState("rounded-lg");
@@ -14,6 +29,8 @@ export default function TailwindBordersPlayground() {
     const [borderStyle, setBorderStyle] = useState("border-solid");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const resetValues = () => {
         setRounded("rounded-lg");
@@ -45,9 +62,16 @@ export default function TailwindBordersPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-emerald-500">
-                            Borders & Rings
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-emerald-500">
+                                Borders & Rings
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind border utilities in this playground"
+                                title={`What is ${TW_BORDERS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Style corners, widths, and colors.
                         </p>
@@ -127,6 +151,9 @@ export default function TailwindBordersPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_BORDERS_GUIDE} onClose={closeGuide} titleId="tw-borders-guide-title" />
+            )}
             <Footer />
         </div>
     );

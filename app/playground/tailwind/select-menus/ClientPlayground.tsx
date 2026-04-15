@@ -1,12 +1,29 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, ChevronDown, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+
+const TW_SELECT_MENUS_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind select menus",
+    intro:
+        "Native `<select>` uses full-width block classes with rings and focus states. Custom menus pair a `relative` container, `absolute` popover list (`z-10`, `shadow-lg`, `ring-1`), and a trigger button with `aria-haspopup` / `aria-expanded`. Options use hover/active background utilities.",
+    syntax: [
+        'className="mt-2 block w-full rounded-md ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600"',
+        '<ul class="absolute z-10 mt-1 max-h-56 overflow-auto rounded-md shadow-lg ring-1 ring-black/5">',
+    ],
+    values: [
+        { term: "ring / shadow", desc: "Elevation and focus affordances on the control." },
+        { term: "absolute + z-10", desc: "Positions the dropdown over surrounding content." },
+        { term: "hover:bg-* on options", desc: "Highlights the row under the pointer." },
+    ],
+    tip: "For custom widgets, implement keyboard navigation (Arrow keys, Enter, Escape) to match native behavior.",
+};
 
 // Mock Data
 const people = [
@@ -30,6 +47,8 @@ export default function SelectMenusPlaygroundClient() {
     const [isOpen, setIsOpen] = useState(false);
     const [label, setLabel] = useState("Assigned to");
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -165,9 +184,16 @@ export default function SelectMenusPlaygroundClient() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
-                            Select Menus
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-400 to-green-400">
+                                Select Menus
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind select menu patterns in this playground"
+                                title={`What is ${TW_SELECT_MENUS_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Customizable dropdowns with avatars, status indicators, and more.
                         </p>
@@ -336,6 +362,10 @@ export default function SelectMenusPlaygroundClient() {
                     </div>
                 </motion.div>
             </div>
+
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_SELECT_MENUS_GUIDE} onClose={closeGuide} titleId="tw-select-menus-guide-title" />
+            )}
 
             <Footer />
         </div>

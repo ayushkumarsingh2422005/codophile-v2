@@ -1,11 +1,28 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PlaygroundGuideModal, PlaygroundHelpButton, type PlaygroundGuideDoc } from "@/components/playground/PlaygroundGuideModal";
 import { ArrowLeft, Copy, RefreshCw, Check, MousePointer2 } from "lucide-react";
 import Link from "next/link";
+
+const TW_SCROLL_GUIDE: PlaygroundGuideDoc = {
+    title: "Tailwind scroll utilities",
+    intro:
+        "Scroll-smooth changes programmatic scrolling behavior; `snap-*` utilities enable CSS scroll snap on containers and children; `scroll-p-*` / `scroll-m-*` adjust padding and margin for scroll snapping alignment.",
+    syntax: [
+        'className="overflow-x-auto scroll-smooth snap-x snap-mandatory snap-center"',
+        "/* scroll-padding / margin use scroll-p-* / scroll-m-* */",
+    ],
+    values: [
+        { term: "scroll-smooth / scroll-auto", desc: "scroll-behavior for smooth scrolling." },
+        { term: "snap-* (type, mandatory, align)", desc: "Defines axis and snap alignment for child items." },
+        { term: "scroll-p-* / scroll-m-*", desc: "Offsets that affect snap alignment and padding." },
+    ],
+    tip: "The scroll container needs `overflow` set and children wider than the viewport for horizontal snap demos.",
+};
 
 export default function TailwindScrollPlayground() {
     const [scrollBehavior, setScrollBehavior] = useState("scroll-smooth");
@@ -17,6 +34,8 @@ export default function TailwindScrollPlayground() {
     const [scrollMargin, setScrollMargin] = useState("scroll-m-0");
 
     const [copied, setCopied] = useState(false);
+    const [guideOpen, setGuideOpen] = useState(false);
+    const closeGuide = useCallback(() => setGuideOpen(false), []);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const resetValues = () => {
@@ -64,9 +83,16 @@ export default function TailwindScrollPlayground() {
                         <Link href="/playground/tailwind" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
                             <ArrowLeft className="w-4 h-4" /> Back to Tailwind
                         </Link>
-                        <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-indigo-500">
-                            Scroll Utilities
-                        </h1>
+                        <div className="flex items-center gap-1.5">
+                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-indigo-500">
+                                Scroll Utilities
+                            </h1>
+                            <PlaygroundHelpButton
+                                onClick={() => setGuideOpen(true)}
+                                ariaLabel="Learn about Tailwind scroll utilities in this playground"
+                                title={`What is ${TW_SCROLL_GUIDE.title}?`}
+                            />
+                        </div>
                         <p className="text-gray-400 text-xs">
                             Control scroll behavior, snapping, and offsets.
                         </p>
@@ -200,6 +226,9 @@ export default function TailwindScrollPlayground() {
                     </div>
                 </motion.div>
             </div>
+            {guideOpen && (
+                <PlaygroundGuideModal doc={TW_SCROLL_GUIDE} onClose={closeGuide} titleId="tw-scroll-guide-title" />
+            )}
             <Footer />
         </div>
     );
