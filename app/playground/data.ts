@@ -69,6 +69,76 @@ export const playgroundData = {
                 description: "Master CSS Grid layout with interactive controls for grid-template-columns, grid-template-rows, gap, and grid-item placement.",
                 keywords: ["css grid", "grid layout", "grid-template-columns", "grid-gap", "grid-area"]
             },
+            "box-model": {
+                title: "CSS Box Model Playground - width, margin, padding, box-sizing",
+                description: "Experiment with width, height, margin, padding, and box-sizing. See how the CSS box model affects element size.",
+                keywords: ["css box model", "box-sizing", "margin", "padding", "width", "height"]
+            },
+            positioning: {
+                title: "CSS Position Playground - relative parent, absolute child, containing block",
+                description: "Master position, containing blocks, top/right/bottom/left, and z-index. Scenarios: relative+absolute, static parent escape, fixed viewport, centering.",
+                keywords: ["css position", "relative", "absolute", "containing block", "z-index", "fixed", "top", "left"]
+            },
+            overflow: {
+                title: "CSS Overflow Playground - overflow, text-overflow, white-space",
+                description: "Control overflow, text-overflow ellipsis, and white-space on constrained text.",
+                keywords: ["css overflow", "text-overflow", "ellipsis", "white-space"]
+            },
+            outline: {
+                title: "CSS Outline Playground - outline, outline-offset",
+                description: "outline, outline-style, and outline-offset — lines drawn outside the border without affecting layout.",
+                keywords: ["css outline", "outline-offset", "focus ring"]
+            },
+            animations: {
+                title: "CSS Animations Playground - @keyframes, easing, fill-mode",
+                description: "Master @keyframes and every animation-* property. Presets: spinners, bounce, slide entrances, pulse badges. Scenarios with delay, direction, and fill-mode.",
+                keywords: ["css animation", "keyframes", "animation-duration", "animation-timing-function", "animation-fill-mode", "animation-iteration-count"]
+            },
+            lists: {
+                title: "CSS List Properties Playground - list-style-type, position",
+                description: "list-style-type and list-style-position on ordered and unordered lists.",
+                keywords: ["list-style-type", "list-style-position", "css lists"]
+            },
+            columns: {
+                title: "CSS Multi-column Playground - column-count, gap, rule",
+                description: "column-count, column-gap, and column-rule for newspaper-style text layout.",
+                keywords: ["css columns", "column-count", "column-gap", "column-rule"]
+            },
+            "object-fit": {
+                title: "CSS Object Fit Playground - object-fit, object-position",
+                description: "object-fit and object-position for images and replaced elements.",
+                keywords: ["object-fit", "object-position", "css image fit"]
+            },
+            "opacity-blend": {
+                title: "CSS Opacity & Blend Playground - opacity, all mix-blend-mode values",
+                description: "opacity and all 16 mix-blend-mode values. Compare solid layer vs image layer over a colorful backdrop.",
+                keywords: ["css opacity", "mix-blend-mode", "blend modes", "multiply", "screen", "difference"]
+            },
+            "text-layout": {
+                title: "CSS Text Layout Playground - decoration, word-break, overflow-wrap",
+                description: "text-decoration, word-break, and overflow-wrap for long text in narrow boxes.",
+                keywords: ["text-decoration", "word-break", "overflow-wrap"]
+            },
+            scroll: {
+                title: "CSS Scroll Playground - scroll-behavior, scroll-snap",
+                description: "scroll-behavior and scroll-snap-type for smooth and snapped scrolling.",
+                keywords: ["scroll-behavior", "scroll-snap-type", "css scroll"]
+            },
+            interaction: {
+                title: "CSS Interaction Playground - all 36 cursor values",
+                description: "Every CSS cursor keyword — general, selection, drag, resize, zoom — plus pointer-events and user-select.",
+                keywords: ["css cursor", "grab", "resize cursor", "pointer-events", "user-select"]
+            },
+            "clip-path": {
+                title: "CSS Clip Path Playground - all shapes, custom polygon editor",
+                description: "clip-path: circle, ellipse, inset, polygon. Build custom polygons — add/remove points, presets, evenodd fill rule.",
+                keywords: ["clip-path", "polygon clip-path", "circle clip", "inset clip-path"]
+            },
+            visibility: {
+                title: "CSS Visibility Playground - visibility, content-visibility",
+                description: "visibility and content-visibility — hide elements while preserving or skipping layout.",
+                keywords: ["visibility", "content-visibility", "css hidden"]
+            },
             tooltip: {
                 title: "CSS Tooltip Playground - Positioning & Effects",
                 description: "Design and customize CSS tooltips. Experiment with positioning, arrows, colors, and animations for engaging user interfaces.",
