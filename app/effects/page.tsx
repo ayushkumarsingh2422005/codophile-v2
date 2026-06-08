@@ -92,7 +92,7 @@ function EffectsContent() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       </div>
 
-      <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+      <main className="pt-below-header-lg pb-20 px-6 max-w-7xl mx-auto">
         {/* Hero */}
         <div className="text-center mb-20">
           <motion.div
@@ -128,9 +128,7 @@ function EffectsContent() {
             clean copy-paste code.
           </motion.p>
         </div>
-        <div className="flex justify-center mb-12 sm:mb-16">
-          <AdSenseDisplay className="w-full max-w-3xl min-h-[90px]" />
-        </div>
+        <AdSenseDisplay className="w-full max-w-3xl mb-12 sm:mb-16" />
         {/* Animated Grid */}
         <AnimatePresence mode="wait">
           {loading ? (
@@ -198,8 +196,8 @@ function EffectsContent() {
             <Link href="/playground" className="text-pink-400 hover:underline">
               Open Playground
             </Link>
-            <Link href="/templates" className="text-pink-400 hover:underline">
-              Explore Templates
+            <Link href="/playground/css" className="text-pink-400 hover:underline">
+              CSS Playground
             </Link>
           </div>
         </section>

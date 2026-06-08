@@ -35,7 +35,7 @@ export default function TailwindAnimationsPlayground() {
         <div className="min-h-screen bg-[#030014] text-white selection:bg-cyan-500/30 font-sans">
             <Header />
 
-            <div className="pt-24 pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 min-h-[calc(100vh-100px)]">
+            <div className="pt-below-header pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 min-h-[calc(100vh-var(--site-header-height)-5rem)]">
                 {/* Sidebar */}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}

@@ -46,7 +46,7 @@ export default function Hero() {
     };
 
     return (
-        <section className="relative min-h-screen w-full flex items-center justify-center pt-32 pb-20 overflow-hidden bg-transparent">
+        <section className="relative min-h-screen w-full flex items-center justify-center pt-below-header-lg pb-20 overflow-hidden bg-transparent">
 
 
             <div className="relative z-10 max-w-7xl w-full mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
@@ -59,9 +59,9 @@ export default function Hero() {
                         transition={{ duration: 0.5 }}
                     >
                         <h1 className="text-3xl md:text-5xl font-bold leading-[1.1] tracking-tight">
-                            CSS Animations, UI Components & Tailwind CSS Generator <br />
+                            CSS Effects, Components & Tailwind <br />
                             <span className="bg-clip-text text-transparent bg-linear-to-r from-violet-400 via-fuchsia-400 to-white animate-gradient-x">
-                                Build & Copy Code Instantly
+                                Design live. Copy code.
                             </span>
                         </h1>
                     </motion.div>
@@ -72,9 +72,8 @@ export default function Hero() {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="text-lg text-gray-400 max-w-xl leading-relaxed"
                     >
-                        Explore modern CSS animations, hover effects, and UI components with copy-paste code.
-                        Use a powerful visual CSS playground and Tailwind CSS generator to design interfaces,
-                        experiment in real-time, and export production-ready code instantly.
+                        Copy-paste animations, hover effects, and UI snippets. Tweak styles in the
+                        visual playground and export clean CSS or Tailwind in seconds.
                     </motion.p>
                     <div className="mt-4 text-xs text-gray-600 opacity-70">
                         CSS animations • Tailwind generator • UI components • Copy-paste code

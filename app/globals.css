@@ -4,6 +4,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Fixed site header (beta banner + nav). Updated live by Header via ResizeObserver. */
+  --site-header-height: 6.5rem;
+  --site-header-gap: 2rem;
+  --site-header-offset: calc(var(--site-header-height) + var(--site-header-gap));
 }
 
 @theme inline {
@@ -96,4 +100,13 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Content offset below fixed header (includes beta banner + nav bar) */
+.pt-below-header {
+  padding-top: var(--site-header-offset);
+}
+
+.pt-below-header-lg {
+  padding-top: calc(var(--site-header-offset) + 1.5rem);
 }

@@ -96,7 +96,7 @@ export default function NotFound() {
                     transition={{ delay: 0.6, duration: 0.5 }}
                     className="mt-16 flex flex-wrap justify-center gap-8 text-sm text-gray-500"
                 >
-                    <Link href="/templates" className="hover:text-cyan-400 transition-colors">Popular Templates</Link>
+                    <Link href="/playground" className="hover:text-cyan-400 transition-colors">CSS Playground</Link>
                     <span className="w-1 h-1 bg-gray-700 rounded-full my-auto" />
                     <Link href="/playground/css/flexbox" className="hover:text-cyan-400 transition-colors">Flexbox Playground</Link>
                     <span className="w-1 h-1 bg-gray-700 rounded-full my-auto" />

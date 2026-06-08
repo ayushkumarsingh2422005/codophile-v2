@@ -19,7 +19,7 @@ export default function PlaygroundClientPage() {
         <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-12 blur-3xl opacity-20 w-96 h-96 bg-indigo-500 rounded-full" />
       </div>
 
-      <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-[calc(100vh-100px)] flex flex-col items-center justify-center relative z-10">
+      <main className="pt-below-header-lg pb-20 px-6 max-w-7xl mx-auto min-h-[calc(100vh-var(--site-header-height)-5rem)] flex flex-col items-center justify-center relative z-10">
         {/* Hero */}
         <div className="text-center mb-16 space-y-4">
           <motion.h1
@@ -27,9 +27,9 @@ export default function PlaygroundClientPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-7xl font-bold tracking-tight leading-tight"
           >
-            CSS Playground & Tailwind CSS Generator <br />
+            CSS & Tailwind Playground <br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-violet-400 via-fuchsia-400 to-white animate-gradient-x">
-              Build, Preview & Generate Code Instantly
+              Design live. Copy code.
             </span>
           </motion.h1>
 
@@ -45,9 +45,7 @@ export default function PlaygroundClientPage() {
           </motion.p>
         </div>
 
-        <div className="flex justify-center w-full max-w-3xl mb-12 sm:mb-16">
-          <AdSenseDisplay className="w-full min-h-[90px]" />
-        </div>
+        <AdSenseDisplay className="w-full max-w-3xl mb-12 sm:mb-16" />
 
         {/* Cards */}
         <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl">
@@ -103,8 +101,8 @@ export default function PlaygroundClientPage() {
             <Link href="/effects" className="text-violet-400 hover:underline">
               CSS Animations & Effects
             </Link>
-            <Link href="/templates" className="text-violet-400 hover:underline">
-              UI Templates & Components
+            <Link href="/playground/tailwind" className="text-violet-400 hover:underline">
+              Tailwind Playground
             </Link>
           </div>
         </section>

@@ -27,7 +27,7 @@ export default function LegalPage() {
         <main className="min-h-screen bg-[#030014] text-white selection:bg-indigo-500/30 overflow-hidden">
             <Header />
 
-            <div className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto relative z-10">
+            <div className="relative pt-below-header-lg pb-20 px-6 max-w-5xl mx-auto relative z-10">
                 {/* Background Gradients */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px] -z-10" />
 

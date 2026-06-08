@@ -1,14 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Github, Search, Command, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import SearchModal from "@/components/search/SearchModal";
 
 export default function Header() {
+    const headerRef = useRef<HTMLElement>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+    // Keep --site-header-height in sync with the real header (beta banner + nav)
+    useEffect(() => {
+        const el = headerRef.current;
+        if (!el) return;
+
+        const syncHeaderHeight = () => {
+            document.documentElement.style.setProperty(
+                "--site-header-height",
+                `${el.getBoundingClientRect().height}px`
+            );
+        };
+
+        syncHeaderHeight();
+
+        const observer = new ResizeObserver(syncHeaderHeight);
+        observer.observe(el);
+        window.addEventListener("resize", syncHeaderHeight);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("resize", syncHeaderHeight);
+        };
+    }, []);
 
     // ⌘K / Ctrl+K handler
     useEffect(() => {
@@ -28,7 +53,10 @@ export default function Header() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#030014]/80 backdrop-blur-xl">
+            <header
+                ref={headerRef}
+                className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#030014]/80 backdrop-blur-xl"
+            >
                 {/* Dev Banner */}
                 <div className="bg-[#020204] border-b border-white/5 relative overflow-hidden">
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(124,58,237,0.1)_50%,transparent)] bg-[length:200%_100%] animate-shine opacity-60" />
@@ -65,7 +93,7 @@ export default function Header() {
                             suppressHydrationWarning
                             type="text"
                             className="cursor-pointer block w-full pl-10 pr-3 py-2 border border-white/10 rounded-md leading-5 bg-white/5 text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-white/10 focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 sm:text-sm transition-all"
-                            placeholder="Search documentation, templates..."
+                            placeholder="Search playgrounds, effects, docs..."
                         />
                         <div className="absolute inset-y-0 right-0 pr-3 hidden md:flex items-center pointer-events-none">
                             <span className="text-gray-600 text-xs border border-white/10 rounded px-1.5 py-0.5 flex items-center gap-1">
@@ -77,7 +105,7 @@ export default function Header() {
                     {/* Desktop Navigation & Actions */}
                     <div className="hidden lg:flex items-center gap-4 shrink-0">
                         <nav className="flex items-center gap-6 mr-4">
-                            {["Playground", "Templates", "Effects", "Docs", "About"].map(
+                            {["Playground", "Effects", "Docs", "About"].map(
                                 (item) => (
                                     <Link
                                         key={item}
@@ -134,7 +162,7 @@ export default function Header() {
                             className="absolute top-full left-0 right-0 h-[calc(100vh-100%)] bg-[#030014] border-b border-white/10 p-6 shadow-2xl lg:hidden flex flex-col gap-6 overflow-y-auto"
                         >
                             <nav className="flex flex-col gap-4">
-                                {["Playground", "Templates", "Effects", "Docs", "About"].map(
+                                {["Playground", "Effects", "Docs", "About"].map(
                                     (item) => (
                                         <Link
                                             key={item}

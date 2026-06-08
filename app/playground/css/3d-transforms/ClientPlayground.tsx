@@ -130,7 +130,7 @@ export default function ThreeDTransformsClient() {
         <div className="min-h-screen bg-[#030014] text-white selection:bg-cyan-500/30 font-sans">
             <Header />
 
-            <div className="pt-24 pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 min-h-[calc(100vh-100px)]">
+            <div className="pt-below-header pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 min-h-[calc(100vh-var(--site-header-height)-5rem)]">
 
                 {/* Controls Sidebar */}
                 <motion.div
@@ -161,7 +161,7 @@ export default function ThreeDTransformsClient() {
                         </p>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto pr-2 space-y-6 custom-scrollbar max-h-[600px] lg:max-h-[calc(100vh-250px)]">
+                    <div className="flex-1 overflow-y-auto pr-2 space-y-6 custom-scrollbar max-h-[600px] lg:max-h-[calc(100vh-var(--site-header-height)-9rem)]">
 
                         <ControlGroup title="Parent Container Properties">
                             <SliderControl label="Perspective" value={perspective} onChange={setPerspective} min={0} max={1000} unit="px" />

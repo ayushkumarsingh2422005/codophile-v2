@@ -147,7 +147,7 @@ export default function CSSPlaygroundClient() {
                 <div className="absolute top-0 left-0 translate-y-20 translate-x-10 blur-3xl opacity-20 w-96 h-96 bg-violet-600 rounded-full" />
             </div>
 
-            <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto relative z-10">
+            <main className="pt-below-header-lg pb-20 px-6 max-w-7xl mx-auto relative z-10">
                 <div className="mb-16 flex flex-col md:flex-row justify-between items-start gap-8">
                     <div>
                         <Link href="/playground" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 text-sm group">
@@ -166,9 +166,7 @@ export default function CSSPlaygroundClient() {
                     </div>
                 </div>
 
-                <div className="flex justify-center mb-10 sm:mb-12">
-                    <AdSenseDisplay className="w-full max-w-3xl min-h-[90px]" />
-                </div>
+                <AdSenseDisplay className="w-full max-w-3xl mb-10 sm:mb-12" />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {categories.map((item, idx) => (

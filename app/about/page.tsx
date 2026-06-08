@@ -27,7 +27,7 @@ export default function AboutPage() {
         <main className="min-h-screen bg-[#030014] text-white selection:bg-indigo-500/30 overflow-hidden">
             <Header />
 
-            <div className="relative pt-24 pb-20 px-6 max-w-7xl mx-auto">
+            <div className="relative pt-below-header pb-20 px-6 max-w-7xl mx-auto">
                 {/* Background Gradients */}
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[100px] -z-10" />
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[100px] -z-10" />
@@ -85,7 +85,7 @@ export default function AboutPage() {
                         {[
                             { label: "Designers", value: "4", icon: Users },
                             { label: "Components", value: "100+", icon: Code },
-                            { label: "Templates", value: "50+", icon: Palette },
+                            { label: "Effects", value: "50+", icon: Zap },
                             { label: "Community", value: "10K+", icon: Trophy },
                         ].map((stat, idx) => (
                             <motion.div key={idx} variants={fadeIn} className="text-center">

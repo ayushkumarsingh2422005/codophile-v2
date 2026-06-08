@@ -33,15 +33,12 @@ export default function Home() {
       <Hero />
       <CoreCssSection />
       <TailwindSection />
-      <div className="flex justify-center px-4 py-6 sm:py-10">
-        <AdSenseDisplay className="w-full max-w-3xl min-h-[90px]" />
-      </div>
+      <AdSenseDisplay className="w-full max-w-3xl px-4 py-6 sm:py-10" />
       <FeaturesBento />
       <ReviewsSection />
       <Footer />
 
       <div id="playground" />
-      <div id="templates" />
       </div>
     </main>
   );

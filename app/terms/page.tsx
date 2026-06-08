@@ -15,7 +15,7 @@ export default function TermsPage() {
         <main className="min-h-screen bg-[#030014] text-white selection:bg-indigo-500/30 overflow-hidden">
             <Header />
 
-            <div className="relative pt-32 pb-20 px-6 max-w-4xl mx-auto relative z-10">
+            <div className="relative pt-below-header-lg pb-20 px-6 max-w-4xl mx-auto relative z-10">
                 {/* Background Gradients */}
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[100px] -z-10" />
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[100px] -z-10" />

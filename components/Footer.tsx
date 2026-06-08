@@ -117,8 +117,8 @@ export default function Footer() {
                             <ul className="space-y-6">
                                 {[
                                     { label: "Features", href: "#features" },
-                                    { label: "Templates", href: "#templates" },
-                                    { label: "Integration", href: "#integration" },
+                                    { label: "Playground", href: "/playground" },
+                                    { label: "Effects", href: "/effects" },
                                     { label: "Changelog", href: "/changelog" },
                                     { label: "Roadmap", href: "/roadmap" },
                                 ].map((link, idx) => (
