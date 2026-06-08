@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { LivePreview } from "@/components/EffectsUI/LivePreview";
-import Mascot from "@/components/EffectsUI/Mascot";
+// import Mascot from "@/components/EffectsUI/Mascot";
 import AdSenseDisplay from "@/components/AdSenseDisplay";
 
 const ITEMS_PER_PAGE = 9;
@@ -202,15 +202,12 @@ function EffectsContent() {
           </div>
         </section>
       </main>
-      {/* --- MASCOT COMPONENT --- */}
-      {/* h-0 ensures this container takes up absolutely ZERO vertical space in your layout */}
-      <div className="relative w-full max-w-7xl mx-auto h-0 px-6">
-        {/* absolute and bottom-0 anchor the mascot exactly to the footer line */}
-        {/* left-6 aligns it with the left padding of your main content */}
+      {/* --- MASCOT COMPONENT (disabled — laggy) --- */}
+      {/* <div className="relative w-full max-w-7xl mx-auto h-0 px-6">
         <div className="absolute bottom-0 right-20 md:right-30 z-10 pointer-events-none">
           <Mascot />
         </div>
-      </div>
+      </div> */}
 
       <Footer />
     </div>

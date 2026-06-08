@@ -1,13 +1,18 @@
 export const playgroundData = {
     css: {
-        title: "CSS Playground | Codophile",
-        description: "Master raw CSS properties with visual controls. Experiment with layouts, transforms, animations, and more with real-time feedback.",
-        keywords: ["css playground", "css visual editor", "css learning tool", "interactive css", "css properties"],
+        title: "CSS Properties Playground | Codophile",
+        description: "Explore CSS by topic. Every control maps to a real property from the spec—border-collapse, table-layout, transform, flexbox, and more with live preview.",
+        keywords: ["css playground", "css properties", "css visual editor", "css learning tool", "interactive css"],
         properties: {
             border: {
-                title: "CSS Border Property Playground - Visual Border Editor",
-                description: "Master CSS border properties with interactive controls. Experiment with border-width, border-style, border-color, and border-radius in real-time. Perfect for learning CSS borders visually.",
+                title: "CSS Border Properties Playground - border, border-radius",
+                description: "Experiment with border-width, border-style, border-color, and border-radius. Every control maps to a real CSS property with live preview and copy-paste code.",
                 keywords: ["css border", "border property", "border-width", "border-style", "border-radius", "css visual editor"]
+            },
+            table: {
+                title: "CSS Table Properties Playground - border-collapse, table-layout",
+                description: "Master table-specific CSS: border-collapse, border-spacing, table-layout, caption-side, and empty-cells. See each property's effect on a real HTML table.",
+                keywords: ["css table", "border-collapse", "table-layout", "caption-side", "empty-cells", "border-spacing"]
             },
             "2d-transforms": {
                 title: "CSS 2D Transforms Playground - Rotate, Scale, Translate, Skew",

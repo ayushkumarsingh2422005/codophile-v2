@@ -3,9 +3,9 @@ import React from "react";
 import ClientPlayground from "./ClientPlayground";
 
 export const metadata = {
-    title: "CSS Table Playground | Codophile",
+    title: "CSS Table Properties Playground | Codophile",
     description:
-        "Interactive playground for CSS Table properties. Experiment with borders, alignment, spacing, sizing, and responsive designs.",
+        "border-collapse, border-spacing, table-layout, caption-side, and empty-cells — every control maps to a real table CSS property.",
 };
 
 export default function TablePage() {

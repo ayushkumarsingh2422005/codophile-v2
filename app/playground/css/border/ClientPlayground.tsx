@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import { ArrowLeft, Copy, RefreshCw, Check, CircleHelp, X } from "lucide-react";
 import Link from "next/link";
 
-type BorderDocId = "border" | "border-style" | "border-width" | "border-color";
+type BorderDocId = "border" | "border-style" | "border-width" | "border-color" | "border-radius";
 
 const BORDER_PROPERTY_DOCS: Record<
     BorderDocId,
@@ -81,12 +81,25 @@ const BORDER_PROPERTY_DOCS: Record<
             { term: "transparent", desc: "Fully transparent border (still takes layout space if width > 0)." },
         ],
     },
+    "border-radius": {
+        title: "CSS border-radius",
+        intro:
+            "Rounds the corners of an element’s outer border edge. You can set one value for all corners or up to four values for top-left, top-right, bottom-right, and bottom-left.",
+        syntax: [
+            "border-radius: length;",
+            "border-radius: 8px;",
+            "border-radius: 12px 4px; /* top-left/bottom-right | top-right/bottom-left */",
+            "border-radius: 50%; /* circle on a square box */",
+        ],
+        tip: "border-radius clips the background and border but does not affect layout size.",
+    },
 };
 
 export default function BorderPlaygroundClient() {
     const [borderStyle, setBorderStyle] = useState("solid");
     const [borderWidth, setBorderWidth] = useState(5);
     const [borderColor, setBorderColor] = useState("#3b82f6");
+    const [borderRadius, setBorderRadius] = useState(8);
     const [copied, setCopied] = useState(false);
     const [openDocId, setOpenDocId] = useState<BorderDocId | null>(null);
 
@@ -110,12 +123,13 @@ export default function BorderPlaygroundClient() {
         setBorderStyle("solid");
         setBorderWidth(5);
         setBorderColor("#3b82f6");
+        setBorderRadius(8);
     };
 
     const borderValue = `${borderWidth}px ${borderStyle} ${borderColor}`;
 
     const handleCopy = () => {
-        const code = `.element {\n    border: ${borderValue};\n}`;
+        const code = `.element {\n    border: ${borderValue};\n    border-radius: ${borderRadius}px;\n}`;
         navigator.clipboard.writeText(code);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -146,7 +160,7 @@ export default function BorderPlaygroundClient() {
                             Border
                         </h1>
                         <p className="text-gray-400 text-xs">
-                            Set the border style, width, and color of an element.
+                            border, border-radius, and related properties on a single element.
                         </p>
                     </div>
 
@@ -203,6 +217,17 @@ export default function BorderPlaygroundClient() {
                                     />
                                 </div>
                             </div>
+
+                            <SliderControl
+                                label="Radius"
+                                docId="border-radius"
+                                onOpenDoc={setOpenDocId}
+                                value={borderRadius}
+                                onChange={setBorderRadius}
+                                min={0}
+                                max={80}
+                                unit="px"
+                            />
                         </ControlGroup>
 
                     </div>
@@ -237,7 +262,7 @@ export default function BorderPlaygroundClient() {
                             className="relative z-10 w-64 h-64 md:w-80 md:h-64 bg-[#1a1a1a] flex items-center justify-center p-6 text-center shadow-lg transition-all duration-300"
                             style={{
                                 border: borderValue,
-                                borderRadius: '5px' // Matching the original CSS 5px radius logic
+                                borderRadius: `${borderRadius}px`,
                             }}
                         >
                             <span className="text-white/50 font-mono text-sm">Box Element</span>
@@ -260,6 +285,9 @@ export default function BorderPlaygroundClient() {
                             <div className="text-purple-400">.element <span className="text-white">{`{`}</span></div>
                             <div className="pl-4">
                                 <span className="text-cyan-400">border</span>: <span className="text-orange-300">{borderValue}</span>;
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-cyan-400">border-radius</span>: <span className="text-orange-300">{borderRadius}px</span>;
                             </div>
                             <div className="text-white">{`}`}</div>
                         </div>

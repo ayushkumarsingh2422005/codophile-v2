@@ -16,7 +16,7 @@ import {
 import Image from 'next/image';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Mascot from "@/components/EffectsUI/Mascot";
+// import Mascot from "@/components/EffectsUI/Mascot";
 import AdSenseDisplay from "@/components/AdSenseDisplay";
 
 const categories = [
@@ -187,9 +187,9 @@ export default function TailwindPlaygroundClient() {
                             Select a category to explore the available utilities visually.
                         </p>
                     </div>
-                    <div className="hidden md:block shrink-0 pr-8">
+                    {/* <div className="hidden md:block shrink-0 pr-8">
                         <Mascot />
-                    </div>
+                    </div> */}
                 </div>
 
                 <AdSenseDisplay className="w-full max-w-3xl mb-10 sm:mb-12" />
