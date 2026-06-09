@@ -4,7 +4,128 @@ import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { Code, Palette, Rocket, Users, Zap, Trophy, History, Target } from "lucide-react";
+import { Code, Palette, Rocket, Users, Zap, Trophy, History, Target, Github, Linkedin, Globe } from "lucide-react";
+
+type TeamMember = {
+    name: string;
+    role: string;
+    gradient: string;
+    roleColor: string;
+    github?: string;
+    linkedin?: string;
+    website?: string;
+};
+
+const TEAM_MEMBERS: TeamMember[] = [
+    {
+        name: "Ayush Kumar Singh",
+        role: "Lead Developer & Founder",
+        gradient: "from-violet-500 to-fuchsia-500",
+        roleColor: "text-violet-400",
+        github: "https://github.com/ayushkumarsingh2422005",
+        linkedin: "https://www.linkedin.com/in/its-ayushkrsingh/",
+    },
+    {
+        name: "Roshni Kumari",
+        role: "Team Member",
+        gradient: "from-cyan-500 to-blue-500",
+        roleColor: "text-cyan-400",
+        github: "https://github.com/roshnikumari-21",
+        linkedin: "https://www.linkedin.com/in/roshni-kumari-2aa61928a/",
+    },
+    {
+        name: "Aprajita Kumari",
+        role: "Team Member",
+        gradient: "from-pink-500 to-rose-500",
+        roleColor: "text-pink-400",
+        github: "https://github.com/aprajita-99",
+        linkedin: "https://www.linkedin.com/in/aprajita-thakur-1317a1223/",
+    },
+    {
+        name: "Sakshi Kumari",
+        role: "Team Member",
+        gradient: "from-amber-500 to-orange-500",
+        roleColor: "text-amber-400",
+        github: "https://github.com/walkingshadow911",
+        linkedin: "https://www.linkedin.com/in/sakshi911/",
+    },
+    {
+        name: "DigiCraft Innovation",
+        role: "Parent Company",
+        gradient: "from-emerald-500 to-teal-500",
+        roleColor: "text-emerald-400",
+        website: "https://digicraft.one",
+    },
+];
+
+function SocialLinks({
+    github,
+    linkedin,
+    website,
+}: {
+    github?: string;
+    linkedin?: string;
+    website?: string;
+}) {
+    if (github === undefined && linkedin === undefined && website === undefined) return null;
+
+    const linkClass =
+        "p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors";
+    const disabledClass = "p-2 rounded-lg text-gray-600 cursor-default";
+
+    return (
+        <div className="flex items-center justify-center gap-1 mt-4 pt-3 border-t border-white/5">
+            {github !== undefined &&
+                (github ? (
+                    <a
+                        href={github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub profile"
+                        className={linkClass}
+                    >
+                        <Github size={18} />
+                    </a>
+                ) : (
+                    <span className={disabledClass} title="GitHub link coming soon" aria-hidden>
+                        <Github size={18} />
+                    </span>
+                ))}
+            {linkedin !== undefined &&
+                (linkedin ? (
+                    <a
+                        href={linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn profile"
+                        className={linkClass}
+                    >
+                        <Linkedin size={18} />
+                    </a>
+                ) : (
+                    <span className={disabledClass} title="LinkedIn link coming soon" aria-hidden>
+                        <Linkedin size={18} />
+                    </span>
+                ))}
+            {website !== undefined &&
+                (website ? (
+                    <a
+                        href={website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Company website"
+                        className={linkClass}
+                    >
+                        <Globe size={18} />
+                    </a>
+                ) : (
+                    <span className={disabledClass} title="Website link coming soon" aria-hidden>
+                        <Globe size={18} />
+                    </span>
+                ))}
+        </div>
+    );
+}
 import { HeroIllustration, MissionIllustration, CommunityIllustration } from "@/components/Illustrations";
 
 const fadeIn = {
@@ -212,13 +333,7 @@ export default function AboutPage() {
                     </h2>
 
                     <div className="flex flex-wrap justify-center gap-6">
-                        {[
-                            { name: "Ayush Kumar Singh", role: "Lead Developer & Founder", gradient: "from-violet-500 to-fuchsia-500", roleColor: "text-violet-400" },
-                            { name: "Roshni Kumari", role: "Team Member", gradient: "from-cyan-500 to-blue-500", roleColor: "text-cyan-400" },
-                            { name: "Aprajita Kumari", role: "Team Member", gradient: "from-pink-500 to-rose-500", roleColor: "text-pink-400" },
-                            { name: "Sakshi Kumari", role: "Team Member", gradient: "from-amber-500 to-orange-500", roleColor: "text-amber-400" },
-                            { name: "DigiCraft Innovation", role: "Parent Company", gradient: "from-emerald-500 to-teal-500", roleColor: "text-emerald-400" },
-                        ].map((member, idx) => (
+                        {TEAM_MEMBERS.map((member, idx) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }}
@@ -235,6 +350,7 @@ export default function AboutPage() {
                                 <p className={`text-[10px] font-bold uppercase tracking-widest ${member.roleColor}`}>
                                     {member.role}
                                 </p>
+                                <SocialLinks github={member.github} linkedin={member.linkedin} website={member.website} />
                             </motion.div>
                         ))}
                     </div>
